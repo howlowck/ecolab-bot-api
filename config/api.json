@@ -1,0 +1,137 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "EcoLab Bot",
+        "description": "EcoLab Bot makes your life easier",
+        "version": "0.1.0"
+    },
+    "host": "ecolab-bot-api.azurewebsites.net",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/orders": {
+            "get": {
+                "summary": "Orders",
+                "description": "The /orders endpoint retrieves all the orders given the filter for status and email of the user\n",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filter the status of the orders",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Email of the user",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "An array of orders",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Order"
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/orders/{orderNumber}": {
+            "get": {
+                "summary": "Get an order",
+                "description": "When given the order number, the API will return the individual order.\n",
+                "parameters": [
+                    {
+                        "name": "orderNumber",
+                        "in": "path",
+                        "description": "The order number",
+                        "required": true,
+                        "type": "number",
+                        "format": "double"
+                    }
+                ],
+                "tags": [
+                    "Orders"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "one Order",
+                        "schema": {
+                            "$ref": "#/definitions/Order"
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Order": {
+            "type": "object",
+            "properties": {
+                "order_number": {
+                    "type": "string",
+                    "description": "Unique identifier representing a specific order"
+                },
+                "product": {
+                    "type": "string",
+                    "description": "Item Name"
+                },
+                "order_owner": {
+                    "type": "string",
+                    "description": "Who made the purchase"
+                },
+                "sales_rep_id": {
+                    "type": "string",
+                    "description": "the id of the sales rep which processed the order"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "The Status of the order"
+                },
+                "estimate_completion_date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Date of the Estimate Completion Time"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
